@@ -64,15 +64,16 @@ nav.scrolled {
 .burger.open span:nth-child(2) { opacity: 0; }
 .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
 
+/* Mobile drawer — dark background so text is always readable */
 .mobile-menu {
   display: none; position: fixed; top: var(--nav-h); right: 0; bottom: 0; left: 0;
-  background: rgba(248,244,239,.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  background: var(--dark);
   flex-direction: column; align-items: center; justify-content: center;
-  gap: 1.8rem; z-index: 99; opacity: 0; transform: translateY(-8px); transition: opacity .3s, transform .3s;
+  gap: 1.6rem; z-index: 99; opacity: 0; transform: translateY(-8px); transition: opacity .3s, transform .3s;
 }
 .mobile-menu.open { display: flex; opacity: 1; transform: translateY(0); }
-.mobile-menu a { font-size: 1.35rem; font-family: 'Cormorant Garamond', serif; color: var(--charcoal); font-weight: 400; }
-.mobile-menu a:hover { color: var(--sage); }
+.mobile-menu a { font-size: 1.5rem; font-family: 'Cormorant Garamond', serif; color: var(--cream); font-weight: 400; letter-spacing: .04em; }
+.mobile-menu a:hover, .mobile-menu a:active { color: var(--sage); }
 
 /* HERO */
 .hero {
@@ -227,6 +228,11 @@ footer a { color: var(--sage); }
   :root { --nav-h: 62px; }
   .nav-links, nav > .nav-cta { display: none; }
   .burger { display: flex; }
+  /* burger lines turn white when dark menu is open */
+  .burger.open span { background: var(--white); }
+  /* lang-bar stays in nav on mobile, keep it compact */
+  .lang-bar { gap: .2rem; }
+  .lang-btn { padding: .22rem .5rem; font-size: .68rem; }
   .hero { grid-template-columns: 1fr; padding-top: calc(var(--nav-h) + 3rem); padding-bottom: 3rem; text-align: center; }
   .hero-tag, .hero-btns { justify-content: center; }
   .hero-desc { margin-inline: auto; }
@@ -270,14 +276,14 @@ footer a { color: var(--sage); }
     <li><a href="#topics"   data-lang="tr">Konular</a>    <a href="#topics"   data-lang="en">Topics</a></li>
     <li><a href="#tips"     data-lang="tr">İpuçları</a>   <a href="#tips"     data-lang="en">Tips</a></li>
   </ul>
-  <!-- Language switcher lives here so it never overlaps the CTA -->
+  <!-- CTA first, lang switcher second (rightmost) -->
+  <a href="#contact" class="nav-cta" data-lang="tr">Randevu Al</a>
+  <a href="#contact" class="nav-cta" data-lang="en">Book Now</a>
   <div class="lang-bar">
     <button class="lang-btn active" id="btnTR" onclick="setLang('tr')">TR</button>
     <span class="lang-sep">|</span>
     <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
   </div>
-  <a href="#contact" class="nav-cta" data-lang="tr">Randevu Al</a>
-  <a href="#contact" class="nav-cta" data-lang="en">Book Now</a>
   <button class="burger" id="burger" aria-label="Menü"><span></span><span></span><span></span></button>
 </nav>
 
@@ -292,8 +298,8 @@ footer a { color: var(--sage); }
   <a href="#topics"   onclick="closeMobile()" data-lang="en">Topics</a>
   <a href="#tips"     onclick="closeMobile()" data-lang="tr">İpuçları</a>
   <a href="#tips"     onclick="closeMobile()" data-lang="en">Tips</a>
-  <a href="#contact"  onclick="closeMobile()" style="margin-top:.5rem" class="btn-primary" data-lang="tr">Randevu Al</a>
-  <a href="#contact"  onclick="closeMobile()" style="margin-top:.5rem" class="btn-primary" data-lang="en">Book Now</a>
+  <a href="#contact"  onclick="closeMobile()" data-lang="tr">İletişim</a>
+  <a href="#contact"  onclick="closeMobile()" data-lang="en">Contact</a>
 </nav>
 
 <!-- ════════════ HERO ════════════ -->
