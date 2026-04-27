@@ -20,10 +20,10 @@
     a   { text-decoration: none; color: inherit; }
 
 
-/* LANGUAGE */
-[data-lang="en"] { display: none; }
-body.lang-en [data-lang="tr"] { display: none; }
-body.lang-en [data-lang="en"] { display: revert; }
+/* LANGUAGE TOGGLE */
+[data-lang="en"] { display: none !important; }
+body.lang-en [data-lang="tr"] { display: none !important; }
+body.lang-en [data-lang="en"] { display: revert !important; }
 
 .lang-bar {
   display: flex; align-items: center; gap: .3rem;
@@ -211,8 +211,18 @@ nav.scrolled {
 .c-form button:hover { background: var(--sage-dk); }
 
 /* FOOTER */
-footer { background: #111; color: rgba(255,255,255,.32); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; padding: 1.3rem clamp(1.25rem,5vw,4rem); font-size: .68rem; letter-spacing: .05em; }
-footer a { color: var(--sage); }
+footer {
+  background: #111;
+  padding: 2rem clamp(1.25rem,5vw,4rem) 1.2rem;
+}
+.footer-links {
+  display: flex; flex-wrap: wrap; gap: .6rem 1.4rem;
+  justify-content: center; margin-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,.08); padding-bottom: 1.2rem;
+}
+.footer-links a { font-size: .7rem; letter-spacing: .08em; color: rgba(255,255,255,.45); text-transform: uppercase; transition: color .2s; }
+.footer-links a:hover { color: var(--sage); }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .4rem; font-size: .67rem; letter-spacing: .04em; color: rgba(255,255,255,.28); }
 
 /* REVEAL */
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity .62s ease, transform .62s ease; }
@@ -223,43 +233,99 @@ footer a { color: var(--sage); }
   .services-grid { grid-template-columns: repeat(2,1fr); }
   .tips-grid { grid-template-columns: repeat(2,1fr); }
 }
-/* ── RESPONSIVE 880px (tablet portrait) ── */
+
+/* ── RESPONSIVE 880px  (tablet + mobile) ── */
 @media (max-width: 880px) {
-  :root { --nav-h: 62px; }
-  .nav-links, nav > .nav-cta { display: none; }
-  .burger { display: flex; }
-  /* burger lines turn white when dark menu is open */
+  :root { --nav-h: 60px; }
+
+  /* NAV: logo left, lang-bar centre-right, burger far right */
+  nav {
+    padding: 0 1rem;
+    gap: .5rem;
+  }
+  nav .nav-links  { display: none; }
+  nav .nav-cta    { display: none; }
+
+  .lang-bar { gap: .15rem; order: 2; margin-left: auto; }
+  .lang-btn  { padding: .2rem .45rem; font-size: .65rem; }
+  .lang-sep  { font-size: .55rem; }
+
+  .burger { display: flex; order: 3; margin-left: .5rem; }
+  /* White lines when dark drawer is open */
   .burger.open span { background: var(--white); }
-  /* lang-bar stays in nav on mobile, keep it compact */
-  .lang-bar { gap: .2rem; }
-  .lang-btn { padding: .22rem .5rem; font-size: .68rem; }
-  .hero { grid-template-columns: 1fr; padding-top: calc(var(--nav-h) + 3rem); padding-bottom: 3rem; text-align: center; }
-  .hero-tag, .hero-btns { justify-content: center; }
-  .hero-desc { margin-inline: auto; }
-  .hero-visual, .scroll-hint, .hero-dots { display: none; }
-  .stats { grid-template-columns: repeat(2,1fr); }
+
+  /* Mobile drawer */
+  .mobile-menu {
+    top: var(--nav-h);
+    background: #1c1c1c;
+  }
+  .mobile-menu a {
+    font-size: 1.4rem;
+    color: #f0ebe3;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    width: 80%; text-align: center; padding-bottom: .6rem;
+  }
+  .mobile-menu a:last-child { border-bottom: none; }
+  .mobile-menu a:hover, .mobile-menu a:active { color: var(--sage); }
+
+  /* HERO */
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding: calc(var(--nav-h) + 2.5rem) 1.25rem 3rem;
+    text-align: center;
+    gap: 2rem;
+  }
+  .hero-tag  { justify-content: center; }
+  .hero-btns { justify-content: center; flex-wrap: wrap; }
+  .hero-desc { margin-inline: auto; max-width: 100%; }
+  .hero-visual, .scroll-hint, .hero-dots, .hero-blob { display: none; }
+
+  /* STATS */
+  .stats { grid-template-columns: repeat(2,1fr); padding: 1.5rem 1.25rem; }
+  .stat-item { padding: .6rem .5rem; }
   .stat-item:nth-child(2) { border-right: none; }
-  .stat-item:nth-child(3) { border-right: 1px solid rgba(255,255,255,.08); }
-  .about-grid { grid-template-columns: 1fr; }
+  .stat-item:nth-child(3) { border-top: 1px solid rgba(255,255,255,.08); border-right: 1px solid rgba(255,255,255,.08); }
+  .stat-item:nth-child(4) { border-top: 1px solid rgba(255,255,255,.08); border-right: none; }
+
+  /* SERVICES */
+  .services-grid { grid-template-columns: 1fr; }
+
+  /* ABOUT */
+  .about-grid { grid-template-columns: 1fr; gap: 2rem; }
   .about-img-wrap img { aspect-ratio: 16/9; }
   .about-deco1, .about-deco2 { display: none; }
-  .topics-grid { grid-template-columns: 1fr; }
+
+  /* TOPICS */
+  .topics-grid { grid-template-columns: 1fr; gap: .75rem; }
   .topic-card:nth-child(1) { grid-column: span 1; aspect-ratio: 16/9; }
   .topic-card:not(:nth-child(1)) { aspect-ratio: 16/9; }
-  .contact { grid-template-columns: 1fr; }
+
+  /* TIPS */
+  .tips-grid { grid-template-columns: repeat(2,1fr); }
+
+  /* CONTACT */
+  .contact { grid-template-columns: 1fr; gap: 2rem; }
+
+  /* FOOTER */
+  .footer-bottom { justify-content: center; text-align: center; }
 }
+
 /* ── RESPONSIVE 600px (phone) ── */
 @media (max-width: 600px) {
-  .services-grid { grid-template-columns: 1fr; }
+  .section { padding: 2.8rem 1.1rem; }
   .tips-grid { grid-template-columns: 1fr; }
-  footer { justify-content: center; text-align: center; }
+  .hero h1  { font-size: clamp(2rem, 9vw, 2.8rem); }
+  .stats    { grid-template-columns: repeat(2,1fr); }
+  .footer-links { gap: .5rem 1rem; }
 }
+
 /* ── RESPONSIVE 380px (small phone) ── */
 @media (max-width: 380px) {
-  .hero-btns { flex-direction: column; }
-  .btn-primary, .btn-outline { text-align: center; }
+  .hero-btns { flex-direction: column; align-items: center; }
+  .btn-primary, .btn-outline { width: 100%; text-align: center; }
+  .lang-btn { padding: .18rem .38rem; font-size: .6rem; }
 }
-@media (hover: none) { }
 
 
   </style>
@@ -316,8 +382,8 @@ footer a { color: var(--sage); }
     <p class="hero-desc" data-lang="en">I bring balance and energy to your life through nutrition consulting, yoga, pilates and movement. A scientific and natural approach for lasting change.</p>
     <div class="hero-btns">
       <a href="#contact" class="btn-primary" data-lang="tr">Ücretsiz Danışın</a>
-      <a href="#contact" class="btn-primary" data-lang="en">Free Consultation</a>
       <a href="#topics"  class="btn-outline" data-lang="tr">Daha Fazla Keşfet</a>
+      <a href="#contact" class="btn-primary" data-lang="en">Free Consultation</a>
       <a href="#topics"  class="btn-outline" data-lang="en">Explore More</a>
     </div>
   </div>
@@ -575,10 +641,22 @@ footer a { color: var(--sage); }
 <!-- ════════════ FOOTER ════════════ -->
 
 <footer>
-  <span data-lang="tr">© 2025 Müberra Nutrition — Tüm hakları saklıdır</span>
-  <span data-lang="en">© 2025 Müberra Nutrition — All rights reserved</span>
-  <span data-lang="tr">💚 ile geliştirildi</span>
-  <span data-lang="en">Made with 💚</span>
+  <div class="footer-links">
+    <a href="#" data-lang="tr">Impressum</a>
+    <a href="#" data-lang="en">Impressum</a>
+    <a href="#" data-lang="tr">Gizlilik Politikası</a>
+    <a href="#" data-lang="en">Privacy Policy</a>
+    <a href="#" data-lang="tr">S.S.S.</a>
+    <a href="#" data-lang="en">FAQ</a>
+    <a href="#" data-lang="tr">Kullanım Şartları</a>
+    <a href="#" data-lang="en">Terms &amp; Conditions</a>
+  </div>
+  <div class="footer-bottom">
+    <span data-lang="tr">© 2025 Müberra Nutrition — Tüm hakları saklıdır</span>
+    <span data-lang="en">© 2025 Müberra Nutrition — All rights reserved</span>
+    <span data-lang="tr">💚 ile geliştirildi</span>
+    <span data-lang="en">Made with 💚</span>
+  </div>
 </footer>
 
 <!-- ════════════ TOPIC MODAL ════════════ -->
