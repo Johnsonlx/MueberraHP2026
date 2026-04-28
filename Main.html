@@ -66,19 +66,27 @@ nav.scrolled {
 
 /* ── MOBILE FULL-SCREEN MENU ─────────────────────────────────────── */
 .mobile-menu {
-  display: none;
   position: fixed; top: 0; right: 0; bottom: 0; left: 0;
   background: #e8f4ea;
+  display: flex;
   flex-direction: column;
   z-index: 9999;
+  visibility: hidden;
   opacity: 0;
+  pointer-events: none;
   transform: translateX(100%);
-  transition: opacity .38s ease, transform .38s cubic-bezier(.4,0,.2,1);
+  transition: transform .38s cubic-bezier(.4,0,.2,1),
+              opacity .32s ease,
+              visibility 0s linear .38s;
 }
 .mobile-menu.open {
-  display: flex;
+  visibility: visible;
   opacity: 1;
+  pointer-events: all;
   transform: translateX(0);
+  transition: transform .38s cubic-bezier(.4,0,.2,1),
+              opacity .32s ease,
+              visibility 0s linear 0s;
 }
 /* Top bar inside menu */
 .mobile-menu::before {
@@ -817,12 +825,14 @@ burger.addEventListener('click', () => {
   const open = mobileMenu.classList.toggle('open');
   burger.classList.toggle('open', open);
   navbar.classList.toggle('menu-open', open);
+  mobileMenu.setAttribute('aria-hidden', !open);
   document.body.style.overflow = open ? 'hidden' : '';
 });
 function closeMobile() {
   mobileMenu.classList.remove('open');
   burger.classList.remove('open');
   navbar.classList.remove('menu-open');
+  mobileMenu.setAttribute('aria-hidden', 'true');
   document.body.style.overflow = '';
 }
 window.addEventListener('resize', () => { if (window.innerWidth > 880) closeMobile(); }, { passive: true });
@@ -1160,7 +1170,7 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLegal(); });
 </script>
 
 <!-- Mobile drawer – placed at end of body to avoid stacking-context issues -->
-<nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+<nav class="mobile-menu" id="mobileMenu">
   <div class="mobile-menu-items">
     <a href="#services" onclick="closeMobile()" data-lang="tr"><span class="mn">01</span>Hizmetler</a>
     <a href="#services" onclick="closeMobile()" data-lang="en"><span class="mn">01</span>Services</a>
