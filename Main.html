@@ -64,16 +64,97 @@ nav.scrolled {
 .burger.open span:nth-child(2) { opacity: 0; }
 .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
 
-/* Mobile drawer — dark background so text is always readable */
+/* ── MOBILE FULL-SCREEN MENU ─────────────────────────────────────── */
 .mobile-menu {
-  display: none; position: fixed; top: var(--nav-h); right: 0; bottom: 0; left: 0;
-  background: var(--dark);
-  flex-direction: column; align-items: center; justify-content: center;
-  gap: 1.6rem; z-index: 99; opacity: 0; transform: translateY(-8px); transition: opacity .3s, transform .3s;
+  display: none;
+  position: fixed; top: 0; right: 0; bottom: 0; left: 0;
+  background: #e8f4ea;
+  flex-direction: column;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity .38s ease, transform .38s cubic-bezier(.4,0,.2,1);
 }
-.mobile-menu.open { display: flex; opacity: 1; transform: translateY(0); }
-.mobile-menu a { font-size: 1.5rem; font-family: 'Cormorant Garamond', serif; color: var(--cream); font-weight: 400; letter-spacing: .04em; }
-.mobile-menu a:hover, .mobile-menu a:active { color: var(--sage); }
+.mobile-menu.open {
+  display: flex;
+  opacity: 1;
+  transform: translateX(0);
+}
+/* Top bar inside menu */
+.mobile-menu::before {
+  content: '';
+  display: block;
+  height: var(--nav-h);
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(80,130,80,.15);
+}
+/* Nav items wrapper — fills remaining space, centered */
+.mobile-menu-items {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 2.4rem;
+  gap: 0;
+}
+.mobile-menu a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2rem, 8vw, 2.6rem);
+  font-weight: 300;
+  color: #1e3d22;
+  letter-spacing: .02em;
+  line-height: 1;
+  padding: .65rem 0;
+  border-bottom: 1px solid rgba(60,110,65,.12);
+  width: 100%;
+  display: block;
+  position: relative;
+  transition: color .2s, padding-left .22s;
+}
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a::before {
+  content: '';
+  position: absolute;
+  left: -1.2rem;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 3px;
+  height: 60%;
+  background: var(--sage);
+  border-radius: 2px;
+  transition: transform .22s cubic-bezier(.4,0,.2,1);
+}
+.mobile-menu a:hover { color: var(--sage-dk); padding-left: .5rem; }
+.mobile-menu a:hover::before { transform: translateY(-50%) scaleY(1); }
+/* Counter number beside each link */
+.mobile-menu a .mn {
+  font-size: .65rem;
+  font-family: 'Nunito', sans-serif;
+  letter-spacing: .15em;
+  color: var(--sage);
+  vertical-align: super;
+  margin-right: .5rem;
+  font-weight: 600;
+}
+/* Footer bar at bottom of menu */
+.mobile-menu-foot {
+  padding: 1.4rem 2.4rem;
+  border-top: 1px solid rgba(60,110,65,.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.mobile-menu-foot .mm-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: .95rem;
+  color: rgba(30,61,34,.45);
+  letter-spacing: .06em;
+}
+.mobile-menu-foot .mm-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--sage); opacity: .5;
+}
 
 /* HERO */
 .hero {
@@ -244,29 +325,28 @@ footer {
     gap: .5rem;
   }
   nav .nav-links  { display: none; }
-  nav .nav-cta    { display: none; }
+  nav .nav-cta    { display: none !important; }
+  /* Override lang-system revert for CTA on mobile */
+  body.lang-en nav .nav-cta[data-lang="en"] { display: none !important; }
+  body nav .nav-cta[data-lang="tr"]         { display: none !important; }
 
   .lang-bar { gap: .15rem; order: 2; margin-left: auto; }
   .lang-btn  { padding: .2rem .45rem; font-size: .65rem; }
   .lang-sep  { font-size: .55rem; }
 
   .burger { display: flex; order: 3; margin-left: .5rem; }
-  /* White lines when dark drawer is open */
-  .burger.open span { background: var(--white); }
+  /* Burger lines: dark green when menu is open on pastel bg */
+  .burger.open span { background: #1e3d22; }
+  /* Nav gets pastel green bg while menu is open */
+  nav.menu-open { background: #e8f4ea !important; box-shadow: 0 1px 0 rgba(80,130,80,.2); }
+  nav.menu-open .lang-bar { pointer-events: none; opacity: .4; }
+  nav.menu-open .burger span { background: #1e3d22; }
 
-  /* Mobile drawer */
-  .mobile-menu {
-    top: var(--nav-h);
-    background: #1c1c1c;
-  }
-  .mobile-menu a {
-    font-size: 1.4rem;
-    color: #f0ebe3;
-    border-bottom: 1px solid rgba(255,255,255,.07);
-    width: 80%; text-align: center; padding-bottom: .6rem;
-  }
-  .mobile-menu a:last-child { border-bottom: none; }
-  .mobile-menu a:hover, .mobile-menu a:active { color: var(--sage); }
+  /* Mobile menu: slide from right, full screen */
+  .mobile-menu { top: 0; }
+  .mobile-menu-items { padding: 0 1.8rem; }
+  .mobile-menu a { font-size: clamp(1.8rem,7vw,2.2rem); padding: .55rem 0; }
+  .mobile-menu-foot { padding: 1.2rem 1.8rem; }
 
   /* HERO */
   .hero {
@@ -280,6 +360,8 @@ footer {
   .hero-btns { justify-content: center; flex-wrap: wrap; }
   .hero-desc { margin-inline: auto; max-width: 100%; }
   .hero-visual, .scroll-hint, .hero-dots, .hero-blob { display: none; }
+  /* Keep scroll-hint hidden on mobile regardless of language */
+  body.lang-en .scroll-hint[data-lang="en"] { display: none !important; }
 
   /* STATS */
   .stats { grid-template-columns: repeat(2,1fr); padding: 1.5rem 1.25rem; }
@@ -328,6 +410,55 @@ footer {
 }
 
 
+
+/* ── LEGAL SLIDE-UP PANEL ───────────────────────────────────────── */
+.lpanel-bg{position:fixed;inset:0;z-index:600;background:rgba(20,30,20,.5);
+  backdrop-filter:blur(5px);opacity:0;pointer-events:none;transition:opacity .3s}
+.lpanel-bg.open{opacity:1;pointer-events:all}
+.lpanel{position:fixed;bottom:0;left:0;right:0;z-index:601;
+  background:var(--cream);border-radius:18px 18px 0 0;
+  max-height:85vh;display:flex;flex-direction:column;
+  box-shadow:0 -6px 50px rgba(0,0,0,.18);
+  transform:translateY(100%);transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.lpanel.open{transform:translateY(0)}
+.lpanel-grip{width:36px;height:4px;border-radius:2px;background:var(--bone);
+  margin:12px auto 0;cursor:pointer;flex-shrink:0}
+.lpanel-hd{display:flex;align-items:center;justify-content:space-between;
+  padding:1.1rem 1.8rem .9rem;border-bottom:1px solid var(--bone);flex-shrink:0}
+.lpanel-hd h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.3rem,3vw,1.75rem);
+  font-weight:300;color:var(--charcoal)}
+.lpanel-x{background:none;border:none;cursor:pointer;font-size:1.25rem;
+  color:var(--text-sub);padding:.3rem;line-height:1;transition:color .2s}
+.lpanel-x:hover{color:var(--charcoal)}
+.lpanel-body{overflow-y:auto;padding:1.6rem 1.8rem 3rem;
+  font-size:.85rem;line-height:1.88;color:var(--text-sub);flex:1;
+  -webkit-overflow-scrolling:touch}
+.lpanel-body h3{font-family:'Cormorant Garamond',serif;font-size:1.15rem;
+  font-weight:400;color:var(--charcoal);margin:1.3rem 0 .45rem}
+.lpanel-body h3:first-child{margin-top:0}
+.lpanel-body p{margin-bottom:.65rem}
+.lpanel-body ul{padding-left:1.2rem;margin-bottom:.75rem}
+.lpanel-body li{margin-bottom:.3rem}
+.lpanel-body strong{color:var(--charcoal);font-weight:600}
+.lpanel-body a{color:var(--sage-dk);text-decoration:underline}
+/* FAQ accordion */
+.faq-row{border-bottom:1px solid var(--bone)}
+.faq-btn{width:100%;background:none;border:none;text-align:left;
+  padding:.9rem 0;cursor:pointer;
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:600;
+  color:var(--charcoal);transition:color .2s}
+.faq-btn:hover{color:var(--sage-dk)}
+.faq-plus{font-size:1.05rem;color:var(--sage);transition:transform .25s;flex-shrink:0}
+.faq-row.is-open .faq-plus{transform:rotate(45deg)}
+.faq-ans{max-height:0;overflow:hidden;
+  transition:max-height .32s cubic-bezier(.4,0,.2,1),padding .28s;
+  font-size:.82rem;color:var(--text-sub);line-height:1.8}
+.faq-row.is-open .faq-ans{max-height:300px;padding-bottom:.9rem}
+@media(max-width:600px){
+  .lpanel-body{padding:1.2rem 1.1rem 3rem}
+  .lpanel-hd{padding:.9rem 1.1rem .8rem}
+}
   </style>
 </head>
 <body>
@@ -353,20 +484,6 @@ footer {
   <button class="burger" id="burger" aria-label="Menü"><span></span><span></span><span></span></button>
 </nav>
 
-<!-- Mobile drawer -->
-
-<nav class="mobile-menu" id="mobileMenu">
-  <a href="#services" onclick="closeMobile()" data-lang="tr">Hizmetler</a>
-  <a href="#services" onclick="closeMobile()" data-lang="en">Services</a>
-  <a href="#about"    onclick="closeMobile()" data-lang="tr">Hakkımda</a>
-  <a href="#about"    onclick="closeMobile()" data-lang="en">About</a>
-  <a href="#topics"   onclick="closeMobile()" data-lang="tr">Konular</a>
-  <a href="#topics"   onclick="closeMobile()" data-lang="en">Topics</a>
-  <a href="#tips"     onclick="closeMobile()" data-lang="tr">İpuçları</a>
-  <a href="#tips"     onclick="closeMobile()" data-lang="en">Tips</a>
-  <a href="#contact"  onclick="closeMobile()" data-lang="tr">İletişim</a>
-  <a href="#contact"  onclick="closeMobile()" data-lang="en">Contact</a>
-</nav>
 
 <!-- ════════════ HERO ════════════ -->
 
@@ -642,14 +759,14 @@ footer {
 
 <footer>
   <div class="footer-links">
-    <a href="#" data-lang="tr">Impressum</a>
-    <a href="#" data-lang="en">Impressum</a>
-    <a href="#" data-lang="tr">Gizlilik Politikası</a>
-    <a href="#" data-lang="en">Privacy Policy</a>
-    <a href="#" data-lang="tr">S.S.S.</a>
-    <a href="#" data-lang="en">FAQ</a>
-    <a href="#" data-lang="tr">Kullanım Şartları</a>
-    <a href="#" data-lang="en">Terms &amp; Conditions</a>
+    <a href="#" onclick="openLegal('impressum');return false;" data-lang="tr">Impressum</a>
+    <a href="#" onclick="openLegal('impressum');return false;" data-lang="en">Impressum</a>
+    <a href="#" onclick="openLegal('privacy');return false;" data-lang="tr">Gizlilik Politikası</a>
+    <a href="#" onclick="openLegal('privacy');return false;" data-lang="en">Privacy Policy</a>
+    <a href="#" onclick="openLegal('faq');return false;" data-lang="tr">S.S.S.</a>
+    <a href="#" onclick="openLegal('faq');return false;" data-lang="en">FAQ</a>
+    <a href="#" onclick="openLegal('terms');return false;" data-lang="tr">Kullanım Şartları</a>
+    <a href="#" onclick="openLegal('terms');return false;" data-lang="en">Terms &amp; Conditions</a>
   </div>
   <div class="footer-bottom">
     <span data-lang="tr">© 2025 Müberra Nutrition — Tüm hakları saklıdır</span>
@@ -699,11 +816,13 @@ const mobileMenu = document.getElementById('mobileMenu');
 burger.addEventListener('click', () => {
   const open = mobileMenu.classList.toggle('open');
   burger.classList.toggle('open', open);
+  navbar.classList.toggle('menu-open', open);
   document.body.style.overflow = open ? 'hidden' : '';
 });
 function closeMobile() {
   mobileMenu.classList.remove('open');
   burger.classList.remove('open');
+  navbar.classList.remove('menu-open');
   document.body.style.overflow = '';
 }
 window.addEventListener('resize', () => { if (window.innerWidth > 880) closeMobile(); }, { passive: true });
@@ -896,7 +1015,180 @@ function submitForm() {
     });
   }, 3000);
 }
+
+/* ── Legal panel ── */
+const _legalData = {
+  impressum:{
+    tr:'Impressum', en:'Impressum',
+    ctr:`<h3>Hizmet Sağlayıcı</h3>
+<p><strong>Müberra Nutrition</strong><br>Beslenme Danışmanlığı, Yoga &amp; Pilates<br>[Adres Satırı 1], [Şehir], Almanya</p>
+<h3>İletişim</h3>
+<p>Tel: <a href="tel:+49000000000">+49 (0) 000 000 0000</a><br>E-posta: <a href="mailto:info@muberranutrition.de">info@muberranutrition.de</a></p>
+<h3>Sorumlu Kişi</h3>
+<p><strong>Müberra [Soyadı]</strong> — Beslenme Danışmanı, Yoga &amp; Pilates Eğitmeni</p>
+<h3>Sorumluluk Reddi</h3>
+<p>Bu sitedeki içerikler genel bilgilendirme amaçlıdır ve tıbbi tavsiye niteliği taşımaz. Sağlık kararlarınız için doktorunuza danışınız.</p>
+<h3>Telif Hakkı</h3>
+<p>© 2025 Müberra Nutrition. Tüm içerikler telif hakkıyla korunmaktadır. İzinsiz kopyalanamaz.</p>`,
+    cen:`<h3>Service Provider</h3>
+<p><strong>Müberra Nutrition</strong><br>Nutrition Consulting, Yoga &amp; Pilates<br>[Address Line 1], [City], Germany</p>
+<h3>Contact</h3>
+<p>Phone: <a href="tel:+49000000000">+49 (0) 000 000 0000</a><br>Email: <a href="mailto:info@muberranutrition.de">info@muberranutrition.de</a></p>
+<h3>Person Responsible</h3>
+<p><strong>Müberra [Surname]</strong> — Nutrition Consultant, Yoga &amp; Pilates Instructor</p>
+<h3>Disclaimer</h3>
+<p>Content on this site is for general information only and does not constitute medical advice. Please consult your doctor before making health-related decisions.</p>
+<h3>Copyright</h3>
+<p>© 2025 Müberra Nutrition. All content is protected by copyright. Unauthorised copying is prohibited.</p>`
+  },
+  privacy:{
+    tr:'Gizlilik Politikası', en:'Privacy Policy',
+    ctr:`<h3>1. Genel Bakış</h3>
+<p>Bu politika, Müberra Nutrition web sitesinde kişisel verilerinizin nasıl işlendiğini açıklar. GDPR kapsamındaki haklarınıza saygı gösteriyoruz.</p>
+<h3>2. Toplanan Veriler</h3>
+<p><strong>İletişim formu:</strong> Adınız, e-posta adresiniz ve mesajınız — yalnızca size yanıt vermek için kullanılır, üçüncü taraflarla paylaşılmaz.</p>
+<p><strong>Teknik veriler:</strong> IP adresi, tarayıcı türü gibi bilgiler istatistiksel amaçlarla sunucu günlüklerinde saklanabilir.</p>
+<h3>3. Çerezler</h3>
+<p>Yalnızca dil tercihini hatırlamak amacıyla işlevsel çerezler kullanılmaktadır. Reklam veya izleme çerezi kullanılmamaktadır.</p>
+<h3>4. Haklarınız (GDPR)</h3>
+<p>Verilerinize erişim, düzeltme, silme ve itiraz haklarına sahipsiniz. Talepler için: <a href="mailto:info@muberranutrition.de">info@muberranutrition.de</a></p>
+<h3>5. Veri Güvenliği</h3>
+<p>Verileriniz SSL şifrelemesiyle korunmaktadır. Kişisel veriler asla üçüncü şahıslara satılmaz veya kiralanmaz.</p>`,
+    cen:`<h3>1. Overview</h3>
+<p>This policy explains how your personal data is processed on the Müberra Nutrition website. We respect your rights under GDPR.</p>
+<h3>2. Data Collected</h3>
+<p><strong>Contact form:</strong> Your name, email and message — used solely to respond to you, never shared with third parties.</p>
+<p><strong>Technical data:</strong> Information such as IP address and browser type may be stored in server logs for statistical purposes.</p>
+<h3>3. Cookies</h3>
+<p>Only functional cookies are used to remember your language preference. No advertising or tracking cookies are used.</p>
+<h3>4. Your Rights (GDPR)</h3>
+<p>You have the right to access, rectify, erase and object to your data. Requests: <a href="mailto:info@muberranutrition.de">info@muberranutrition.de</a></p>
+<h3>5. Data Security</h3>
+<p>Your data is protected with SSL encryption. Personal data is never sold or rented to third parties.</p>`
+  },
+  faq:{
+    tr:'Sıkça Sorulan Sorular', en:'Frequently Asked Questions',
+    ctr:null, cen:null  // built dynamically below
+  },
+  terms:{
+    tr:'Kullanım Şartları', en:'Terms & Conditions',
+    ctr:`<h3>1. Genel Hükümler</h3>
+<p>Bu siteyi kullanarak aşağıdaki şartları kabul etmiş sayılırsınız. Müberra Nutrition bu şartları önceden haber vermeksizin güncelleme hakkını saklı tutar.</p>
+<h3>2. Hizmetlerin Kapsamı</h3>
+<p>Bireysel beslenme danışmanlığı, online danışmanlık, yoga ve pilates seansları sunulmaktadır. Hizmetler <strong>tıbbi tedavinin yerini tutmaz</strong>.</p>
+<h3>3. İptal Politikası</h3>
+<ul><li>İptaller en az <strong>24 saat önceden</strong> bildirilmelidir.</li><li>Geç iptaller veya gelmemeler için seans ücreti alınabilir.</li></ul>
+<h3>4. Ödeme</h3>
+<p>Seans öncesinde banka transferi, kredi kartı veya PayPal ile ödeme yapılır.</p>
+<h3>5. Sorumluluk</h3>
+<p>Müberra Nutrition, verilen tavsiyeler sonucu ortaya çıkabilecek bireysel sağlık sonuçlarından sorumlu tutulamaz.</p>
+<h3>6. Uygulanacak Hukuk</h3>
+<p>Bu şartlar Alman hukukuna tabidir.</p>`,
+    cen:`<h3>1. General Provisions</h3>
+<p>By using this site you agree to the following terms. Müberra Nutrition reserves the right to update these terms without prior notice.</p>
+<h3>2. Scope of Services</h3>
+<p>Individual nutrition consulting, online consulting, yoga and pilates sessions are offered. Services <strong>do not replace medical treatment</strong>.</p>
+<h3>3. Cancellation Policy</h3>
+<ul><li>Cancellations must be notified at least <strong>24 hours in advance</strong>.</li><li>Late cancellations or no-shows may incur a session fee.</li></ul>
+<h3>4. Payment</h3>
+<p>Payment is made prior to the session by bank transfer, credit card or PayPal.</p>
+<h3>5. Liability</h3>
+<p>Müberra Nutrition cannot be held responsible for individual health outcomes arising from advice provided.</p>
+<h3>6. Governing Law</h3>
+<p>These terms are governed by German law.</p>`
+  }
+};
+
+// Build FAQ content
+const _faqItems = {
+  tr:[
+    ['İlk danışma ücretsiz mi?','Evet! İlk 30 dakikalık tanışma görüşmesi tamamen ücretsiz ve bağlayıcı değildir.'],
+    ['Online danışmanlık mevcut mu?','Evet, video görüşme yoluyla online danışmanlık sunulmaktadır.'],
+    ['Beslenme programı kişiye özel mi?','Evet. Her danışan için yaşı, sağlık durumu, aktivite seviyesi ve hedefleri göz önüne alınarak kişisel plan hazırlanır.'],
+    ['Yoga ve pilates için hangi seviyede katılabilirim?','Başlangıç seviyesinden ileri seviyeye tüm seviyeler için program mevcuttur.'],
+    ['Sonuçları ne zaman görürüm?','Çoğu danışan 2–4 hafta içinde enerji artışı fark eder. Fiziksel sonuçlar genellikle 6–8 haftada görülür.'],
+    ['Seans nasıl iptal edilir?','Seans tarihinden en az 24 saat önce bildirim yapılması yeterlidir.'],
+    ['Hangi ödeme yöntemleri kabul ediliyor?','Banka transferi, kredi kartı ve PayPal kabul edilmektedir.'],
+    ['Bu bir diyet programı mı?','Hayır. Kısa vadeli diyetler yerine uzun vadeli ve sürdürülebilir yaşam tarzı değişikliği hedeflenmektedir.'],
+  ],
+  en:[
+    ['Is the first consultation free?','Yes! The first 30-minute introductory session is completely free and non-binding.'],
+    ['Is online consulting available?','Yes, online consulting via video call is available.'],
+    ['Is the nutrition plan personalised?','Absolutely. A fully personalised plan is prepared for each client based on their age, health, activity level and goals.'],
+    ['What level can I join yoga/pilates at?','Programmes are available for all levels from beginner to advanced.'],
+    ['When will I see results?','Most clients notice improved energy within 2–4 weeks. Physical results typically appear within 6–8 weeks.'],
+    ['How do I cancel a session?','Simply notify us at least 24 hours before your session.'],
+    ['What payment methods do you accept?','Bank transfer, credit card and PayPal are accepted.'],
+    ['Is this a diet programme?','No. The goal is a long-term, sustainable lifestyle change rather than short-term dieting.'],
+  ]
+};
+function _buildFaq(lang){
+  return _faqItems[lang].map((item,i)=>
+    `<div class="faq-row" id="faqr_${lang}_${i}">
+      <button class="faq-btn" onclick="toggleFaq('faqr_${lang}_${i}')">
+        <span>${item[0]}</span><span class="faq-plus">+</span>
+      </button>
+      <div class="faq-ans">${item[1]}</div>
+    </div>`
+  ).join('');
+}
+_legalData.faq.ctr = _buildFaq('tr');
+_legalData.faq.cen = _buildFaq('en');
+
+function openLegal(key){
+  const d = _legalData[key]; if(!d) return;
+  const lang = currentLang;
+  document.getElementById('lpTitle').textContent = d[lang];
+  document.getElementById('lpBody').innerHTML = lang==='tr' ? d.ctr : d.cen;
+  document.getElementById('lpBg').classList.add('open');
+  document.getElementById('lpPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLegal(){
+  document.getElementById('lpBg').classList.remove('open');
+  document.getElementById('lpPanel').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleFaq(id){
+  const row = document.getElementById(id); if(!row) return;
+  const wasOpen = row.classList.contains('is-open');
+  document.querySelectorAll('.faq-row.is-open').forEach(r=>r.classList.remove('is-open'));
+  if(!wasOpen) row.classList.add('is-open');
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLegal(); });
+
 </script>
+
+<!-- Mobile drawer – placed at end of body to avoid stacking-context issues -->
+<nav class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <div class="mobile-menu-items">
+    <a href="#services" onclick="closeMobile()" data-lang="tr"><span class="mn">01</span>Hizmetler</a>
+    <a href="#services" onclick="closeMobile()" data-lang="en"><span class="mn">01</span>Services</a>
+    <a href="#about"    onclick="closeMobile()" data-lang="tr"><span class="mn">02</span>Hakkımda</a>
+    <a href="#about"    onclick="closeMobile()" data-lang="en"><span class="mn">02</span>About</a>
+    <a href="#topics"   onclick="closeMobile()" data-lang="tr"><span class="mn">03</span>Konular</a>
+    <a href="#topics"   onclick="closeMobile()" data-lang="en"><span class="mn">03</span>Topics</a>
+    <a href="#tips"     onclick="closeMobile()" data-lang="tr"><span class="mn">04</span>İpuçları</a>
+    <a href="#tips"     onclick="closeMobile()" data-lang="en"><span class="mn">04</span>Tips</a>
+    <a href="#contact"  onclick="closeMobile()" data-lang="tr"><span class="mn">05</span>İletişim</a>
+    <a href="#contact"  onclick="closeMobile()" data-lang="en"><span class="mn">05</span>Contact</a>
+  </div>
+  <div class="mobile-menu-foot">
+    <span class="mm-brand">Müberra Nutrition</span>
+    <span class="mm-dot"></span>
+  </div>
+</nav>
+
+<!-- ── LEGAL PANEL ───────────────────────────────────────────────── -->
+<div class="lpanel-bg" id="lpBg" onclick="closeLegal()"></div>
+<div class="lpanel" id="lpPanel">
+  <div class="lpanel-grip" onclick="closeLegal()"></div>
+  <div class="lpanel-hd">
+    <h2 id="lpTitle"></h2>
+    <button class="lpanel-x" onclick="closeLegal()" aria-label="Kapat">✕</button>
+  </div>
+  <div class="lpanel-body" id="lpBody"></div>
+</div>
 
 </body>
 </html>
